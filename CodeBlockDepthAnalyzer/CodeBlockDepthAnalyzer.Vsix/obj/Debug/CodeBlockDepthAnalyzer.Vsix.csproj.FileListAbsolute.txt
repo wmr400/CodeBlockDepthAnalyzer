@@ -1,0 +1,12 @@
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\bin\Debug\Diagnostic.nuspec
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\bin\Debug\tools\install.ps1
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\bin\Debug\tools\uninstall.ps1
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\bin\Debug\CodeBlockDepthAnalyzer.Vsix.vsix
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\bin\Debug\extension.vsixmanifest
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\bin\Debug\CodeBlockDepthAnalyzer.dll
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\bin\Debug\CodeBlockDepthAnalyzer.pdb
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\obj\Debug\CodeBlockDepthAnalyzer.Vsix.csprojResolveAssemblyReference.cache
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\obj\Debug\CodeBlockDepthAnalyzer.Vsix.csproj.CoreCompileInputs.cache
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\obj\Debug\CodeBlockDepthAnalyzer.Vsix.dll
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\obj\Debug\CodeBlockDepthAnalyzer.Vsix.pdb
+c:\users\wouter\source\repos\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer\CodeBlockDepthAnalyzer.Vsix\obj\Debug\extension.vsixmanifest
