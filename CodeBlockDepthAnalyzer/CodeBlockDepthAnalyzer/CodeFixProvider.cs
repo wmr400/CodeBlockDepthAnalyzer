@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -11,7 +9,8 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
-using Microsoft.CodeAnalysis.Text;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Microsoft.CodeAnalysis.Formatting;
 
 namespace CodeBlockDepthAnalyzer
 {
@@ -30,7 +29,7 @@ namespace CodeBlockDepthAnalyzer
             // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
             return WellKnownFixAllProviders.BatchFixer;
         }
-
+        
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
@@ -44,6 +43,8 @@ namespace CodeBlockDepthAnalyzer
             BlockSyntax node = root.FindNode(diagnosticSpan).ChildNodes().OfType<BlockSyntax>().First();
             var s = node.Statements;
 
+            var currentnode = root.FindNode(diagnosticSpan).ChildNodes().First();
+
             ClassDeclarationSyntax cds = root.FindNode(diagnosticSpan).Ancestors().OfType<ClassDeclarationSyntax>().Single();
 
 
@@ -51,7 +52,7 @@ namespace CodeBlockDepthAnalyzer
             context.RegisterCodeFix(
                 CodeAction.Create(
                     title: title,
-                    createChangedDocument: c => ExtractMethod(context.Document, cds, n, c),
+                    createChangedDocument: c => ExtractMethodAsync(context.Document, cds, n, c, node),
                     equivalenceKey: title),
                 diagnostic);
 
@@ -69,23 +70,40 @@ namespace CodeBlockDepthAnalyzer
             //    diagnostic);
         }
 
-        private async Task<Document> ExtractMethod(Document document, ClassDeclarationSyntax cds, SyntaxNode n, CancellationToken c)
+        private async Task<Document> ExtractMethodAsync(Document document, ClassDeclarationSyntax cds, SyntaxNode n, CancellationToken c, BlockSyntax node)
         {
             var oldDocument = document;
 
             var oldSyntaxRoot = await oldDocument.GetSyntaxRootAsync(c);
 
-            var newNode = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("void"), "NewMethod")
-                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword))
-                .WithBody(SyntaxFactory.Block(SyntaxFactory.ParseStatement(n.ToString())));
+            //var statement = ((IfStatementSyntax)n).Statement;
 
+            var newNode = MethodDeclaration(ParseTypeName("void"), "NewMethod")
+                .AddModifiers(Token(SyntaxKind.PrivateKeyword))
+                .WithBody(Block(ParseStatement(n.ToString())));
+            //.WithBody(Block((IfStatementSyntax)n));
+
+            var invocation = InvocationExpression(IdentifierName("NewMethod"));
+            //SyntaxFactory.ArgumentList(
+            //    SyntaxFactory.SingletonSeparatedList(
+            //        SyntaxFactory.Argument(
+            //            SyntaxFactory.IdentifierName("blaat")
+            //            )
+            //        )
+            //    )
+            //);
+
+            var p = n.Parent;
+
+            var changed = p.ReplaceNode(n, ParseStatement(invocation.ToString()));
             var newCds = cds.AddMembers(newNode);
-
             var newSyntaxRoot = oldSyntaxRoot.ReplaceNode(cds, newCds);
 
             var newDocument = oldDocument.WithSyntaxRoot(newSyntaxRoot);
 
-            return newDocument;
+            return await Formatter.FormatAsync(newDocument);
+
+            //return newDocument;
         }
 
         private async Task<Solution> MakeUppercaseAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
